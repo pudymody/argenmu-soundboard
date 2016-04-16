@@ -1,0 +1,22 @@
+[
+	{
+		"file" : "pDropItem.wav",
+		"name" : "Drop Item",
+		"category" : "player"
+	},
+	{
+		"file" : "pDropMoney.wav",
+		"name" : "Drop Money",
+		"category" : "player"
+	},
+	{
+		"file" : "pGetItem.wav",
+		"name" : "Get Item",
+		"category" : "player"
+	},
+	{
+		"file" : "pLevelUp.wav",
+		"name" : "Level Up",
+		"category" : "player"
+	}
+]

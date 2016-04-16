@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Argenmu Soundboard</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="material.css">
+	<style>
+		.page-content .mdl-button {
+			margin: 10px;
+		}
+	</style>
+</head>
+<body>
+	<!-- Simple header with fixed tabs. -->
+	<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs">
+		<header class="mdl-layout__header">
+			<div class="mdl-layout__header-row">
+				<!-- Title -->
+				<span class="mdl-layout-title">Argenmu Soundboard</span>
+			</div>
+			<!-- Tabs -->
+			<div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+				<a href="#player" class="mdl-layout__tab is-active">Player</a>
+				<a href="#fixed-tab-2" class="mdl-layout__tab">Tab 2</a>
+				<a href="#fixed-tab-3" class="mdl-layout__tab">Tab 3</a>
+			</div>
+		</header>
+		<main class="mdl-layout__content">
+			<section class="mdl-layout__tab-panel is-active" id="player">
+				<div class="page-content"><!-- Your content goes here --></div>
+			</section>
+			<section class="mdl-layout__tab-panel" id="fixed-tab-2">
+				<div class="page-content"><!-- Your content goes here --></div>
+			</section>
+			<section class="mdl-layout__tab-panel" id="fixed-tab-3">
+				<div class="page-content"><!-- Your content goes here --></div>
+			</section>
+		</main>
+	</div>
+	<script src="material.js"></script>
+	<script>
+		var getContainer = (function( doc ){
+			var cache = {};
+			return function( id ){
+				if( cache.hasOwnProperty(id) ){
+					return cache[id];
+				}
+
+				cache[id] = doc.getElementById(id).children[0];
+				return cache[id];
+			}
+		}(document));
+
+		var playAudio = (function(){
+			var $AUDIO = new Audio();
+
+			return function( url ){
+				if( !$AUDIO.paused ){
+					$AUDIO.pause();
+				}
+
+				$AUDIO.src = url;
+				$AUDIO.play();
+			}
+		}());
+
+		document.addEventListener('click', function(e){
+			if( e.target.dataset.hasOwnProperty('url') ){
+				playAudio('sounds/' + e.target.dataset.url);
+				return;
+			}
+		}, false);
+
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function(){
+			if (xhr.readyState != 4){
+				return;
+			}
+
+			if( xhr.status !== 200 ){
+				console.error("XHR: Server respnse status is ", xhr.status);
+			}
+
+			var data = JSON.parse(xhr.responseText);
+			data.forEach(function( item ){
+				getContainer( item.category ).innerHTML += '<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" data-url="'+item.file+'">'+item.name+'</button>';
+			});
+		}
+		xhr.open("GET", "sounds.json", true);
+		xhr.send();
+
+		if ('serviceWorker' in navigator){
+			navigator.serviceWorker.register('/sw.js').then(function(registration) {
+				// Registration was successful
+				console.log('ServiceWorker registration successful with scope: ',    registration.scope);
+			}).catch(function(err) {
+				// registration failed :(
+				console.log('ServiceWorker registration failed: ', err);
+			});
+		}
+	</script>
+</body>
+</html>
