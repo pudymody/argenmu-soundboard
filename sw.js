@@ -21,7 +21,7 @@ self.addEventListener("install", function(event) {
 				.then(function(cache){
 					fetch("sounds.json").then(function(r){ return r.json() }).then(function( sounds ){
 						var soundsUrls = sounds.map(function( item ){
-							return new Request("sounds/" + item.file, { mode : "cors" });
+							return new Request("sounds/" + item.file, { mode : "cors", credentials : "include" });
 						});
 
 						cache.addAll( soundsUrls );
