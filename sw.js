@@ -19,13 +19,6 @@ self.addEventListener("install", function(event) {
 			*/
 			.open(VERSION + 'assets')
 				.then(function(cache){
-					fetch("sounds.json").then(function(r){ return r.json() }).then(function( sounds ){
-						var soundsUrls = sounds.map(function( item ){
-							return new Request("sounds/" + item.file, { mode : "cors", credentials : "include" });
-						});
-
-						cache.addAll( soundsUrls );
-					});
 					/* After the cache is opened, we can fill it with the offline fundamentals.
 					The method below will add all resources we've indicated to the cache,
 					after making HTTP requests for each of them.
@@ -85,7 +78,10 @@ self.addEventListener("fetch", function(event){
 
 	event.respondWith(
 		caches.match(event.request).then(function(response){
-			return response || fetch(event.request);
+			return response || fetch(event.request).then(function(response){
+          		cache.put(event.request, response.clone());
+          		return response;
+        	});
 		})
 	);
 });
