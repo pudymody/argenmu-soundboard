@@ -1,9 +1,8 @@
 var VERSION = "1.0.0::";
 var CACHE_URLS = [
-	"/",
+	"/argenmu-soundboard/",
 	"material.css",
 	"material.js",
-	"https://fonts.googleapis.com/icon?family=Material+Icons",
 	"sounds.json"
 ];
 
