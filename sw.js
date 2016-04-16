@@ -3,7 +3,11 @@ var CACHE_URLS = [
 	"/argenmu-soundboard/",
 	"material.css",
 	"material.js",
-	"sounds.json"
+	"sounds.json",
+	"sounds/pDropItem.wav",
+	"sounds/pDropMoney.wav",
+	"sounds/pGetItem.wav",
+	"sounds/pLevelUp.wav"
 ];
 
 self.addEventListener("install", function(event) {
@@ -19,13 +23,6 @@ self.addEventListener("install", function(event) {
 			*/
 			.open(VERSION + 'assets')
 				.then(function(cache){
-					fetch("sounds.json").then(function(r){ return r.json() }).then(function( sounds ){
-						var soundsUrls = sounds.map(function( item ){
-							return new Request("sounds/" + item.file, { mode : "cors" });
-						});
-
-						cache.addAll( soundsUrls );
-					});
 					/* After the cache is opened, we can fill it with the offline fundamentals.
 					The method below will add all resources we've indicated to the cache,
 					after making HTTP requests for each of them.
