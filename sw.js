@@ -52,7 +52,6 @@ self.addEventListener("activate", function(event) {
 								return !key.startsWith(VERSION);
 							})
 							.map(function(key){
-								console.log(key)
 								/* Return a promise that's fulfilled
 								when each outdated cache is deleted.
 								*/
@@ -77,11 +76,13 @@ self.addEventListener("fetch", function(event){
   }
 
 	event.respondWith(
-		caches.match(event.request).then(function(response){
-			return response || fetch(event.request).then(function(response){
-          		cache.put(event.request, response.clone());
-          		return response;
-        	});
-		})
+		caches.open(VERSION + 'assets').then(function(cache){
+			cache.match(event.request).then(function(response){
+				return response || fetch(event.request).then(function(response){
+	          		cache.put(event.request, response.clone());
+	          		return response;
+	        	});
+			});
+		});
 	);
 });
