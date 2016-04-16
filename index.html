@@ -38,6 +38,7 @@
 			</section>
 		</main>
 	</div>
+	<audio></audio>
 	<script src="material.js"></script>
 	<script>
 		var getContainer = (function( doc ){
@@ -53,7 +54,7 @@
 		}(document));
 
 		var playAudio = (function(){
-			var $AUDIO = new Audio();
+			var $AUDIO = document.getElementsByTagName('audio')[0];
 
 			return function( url ){
 				if( !$AUDIO.paused ){
