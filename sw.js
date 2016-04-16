@@ -19,20 +19,18 @@ self.addEventListener("install", function(event) {
 			*/
 			.open(VERSION + 'assets')
 				.then(function(cache){
-					return fetch("sounds.json").then(function(r){ return r.json() }).then(function( sounds ){
+					fetch("sounds.json").then(function(r){ return r.json() }).then(function( sounds ){
 						var soundsUrls = sounds.map(function( item ){
-							return new Request("https://pudymody.github.io/argenmu-soundboard/sounds/" + item.file, { mode : "cors" });
+							return fetch("sounds/" + item.file);
 						});
 
-						CACHE_URLS = CACHE_URLS.concat(soundsUrls);
-
-						return cache.addAll( soundsUrls );
+						cache.addAll( soundsUrls );
 					});
 					/* After the cache is opened, we can fill it with the offline fundamentals.
 					The method below will add all resources we've indicated to the cache,
 					after making HTTP requests for each of them.
 					*/
-					// return cache.addAll(CACHE_URLS);
+					return cache.addAll(CACHE_URLS);
 				})
 				.then(function() {
 					console.log('WORKER: install completed');
